@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>AgriSense Pro - Weather Command Station</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+<style>
+    /* Additional weather page specific styles */
+    .weather-card {
+        margin-bottom: 20px;
+    }
+
+    .forecast-grid {
+        display: flex; /* Changed to flex for horizontal layout */
+        flex-wrap: wrap; /* Allows wrapping to next line if needed */
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .forecast-card {
+        text-align: center;
+        padding: 15px;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        min-width: 190px; /* Ensures minimum width for better layout */
+        flex: 0 0 auto; /* Prevents items from expanding beyond their content */
+    }
+
+    .forecast-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .weather-stat-grid {
+        display: flex; /* Changed to flex for horizontal layout */
+        flex-wrap: wrap; /* Allows wrapping to next line if needed */
+        gap: 15px;
+        justify-content: space-between;
+        margin: 20px 0;
+    }
+
+    .weather-chart {
+        min-height: 350px !important;
+        height: 350px !important;
+    }
+
+    @media (max-width: 767px) {
+        .weather-chart {
+            min-height: 250px !important;
+            height: 250px !important;
+        }
+    }
+
+    .sun-animation {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        margin: 20px 0;
+        overflow: hidden;
+    }
+
+    .sun {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: #ff9800;
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(255, 152, 0, 0.8);
+        animation: sunMovement 12s linear infinite;
+        transform-origin: center center;
+    }
+
+    @keyframes sunMovement {
+        0% { left: 0; bottom: 0; }
+        50% { left: 50%; bottom: 25px; }
+        100% { left: 100%; bottom: 0; }
+    }
+</style>
+</head>
+<body>
+    <div class="phone-frame" style="max-width: 100%; height: 100%;">
+        <div class="header">
+            <div class="header-title">
+                <i class="fas fa-cloud-sun"></i>
+                Weather Command Station
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="header-icon" title="Back to Dashboard"><i class="fas fa-home"></i></a>
+                <span class="header-icon" onclick="refreshWeather()" title="Refresh Weather Data"><i class="fas fa-sync-alt"></i></span>
+                <span class="header-icon" onclick="showWeatherSettings()" title="Weather Settings"><i class="fas fa-cog"></i></span>
+            </div>
+        </div>
+
+        <div class="content" style="max-width: 100%;">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-cloud-sun"></i>
+                        Current Weather Conditions
+                    </h2>
+                    <div class="action-buttons">
+                        <span class="btn" onclick="refreshWeather()" title="Refresh Weather Data"><i class="fas fa-sync-alt"></i> Refresh</span>
+                        <span class="btn" onclick="exportWeatherData()" title="Export Weather Data"><i class="fas fa-download"></i> Export</span>
+                        <span class="btn" onclick="setAlerts()" title="Set Weather Alerts"><i class="fas fa-bell"></i> Set Alerts</span>
+                    </div>
+                </div>
+
+                <div class="weather-card">
+                    <div class="weather-animation">
+                        <div class="cloud" style="top: 35px; animation-delay: 0s;"></div>
+                        <div class="cloud" style="top: 90px; animation-delay: 2s;"></div>
+                        <div class="cloud" style="top: 145px; animation-delay: 4s;"></div>
+                    </div>
+
+                    <div style="position: relative; z-index: 10; padding: 10px 0;">
+                        <div style="font-size: 18px; margin-bottom: 5px; font-weight: 600;">Friday, March 7, 2025</div>
+                        <div style="font-size: 14px;">Farm Central Station, Heartland County</div>
+
+                        <div class="weather-info" style="margin-top: 20px;">
+                            <div>
+                                <div class="weather-temp">78°F</div>
+                                <div class="weather-desc">Partly Cloudy</div>
+                            </div>
+                            <div style="font-size: 60px; color: white;">
+                                <i class="fas fa-cloud-sun"></i>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-around; margin-top: 25px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; color: rgba(255, 255, 255, 0.9);"><i class="fas fa-tint"></i></div>
+                                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin-top: 5px;">Humidity</div>
+                                <div style="font-size: 16px; font-weight: 600; color: white; margin-top: 3px;">65%</div>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; color: rgba(255, 255, 255, 0.9);"><i class="fas fa-wind"></i></div>
+                                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin-top: 5px;">Wind</div>
+                                <div style="font-size: 16px; font-weight: 600; color: white; margin-top: 3px;">8 mph NW</div>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; color: rgba(255, 255, 255, 0.9);"><i class="fas fa-compress-alt"></i></div>
+                                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin-top: 5px;">Pressure</div>
+                                <div style="font-size: 16px; font-weight: 600; color: white; margin-top: 3px;">30.15 inHg</div>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; color: rgba(255, 255, 255, 0.9);"><i class="fas fa-sun"></i></div>
+                                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.9); margin-top: 5px;">UV Index</div>
+                                <div style="font-size: 16px; font-weight: 600; color: white; margin-top: 3px;">7 (High)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sun-animation">
+                    <div class="sun"></div>
+                    <div style="position: absolute; bottom: 0; width: 100%; height: 2px; background: rgba(0,0,0,0.1);"></div>
+                    <div style="position: absolute; left: 0; bottom: 2px; font-size: 10px; color: #666;">Sunrise: 6:45 AM</div>
+                    <div style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 2px; font-size: 10px; color: #666;">Solar Noon: 12:30 PM</div>
+                    <div style="position: absolute; right: 0; bottom: 2px; font-size: 10px; color: #666;">Sunset: 6:15 PM</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-calendar-day"></i>
+                        7-Day Forecast
+                    </h2>
+                </div>
+
+                <div class="forecast-grid">
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto; border-left: 4px solid #4caf50;">
+                        <div class="forecast-day" style="font-weight: bold;">Friday</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 7, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-cloud-sun" style="font-size: 30px; color: #ff9800;"></i></div>
+                        <div class="status-badge" style="font-size: 11px; padding: 3px 8px; background: #4caf50; color: white; display: inline-block; border-radius: 12px;">Current Day</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">78°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">65°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Partly Cloudy</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 20%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 8 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 7</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 80°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Sat</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 8, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-cloud-sun-rain" style="font-size: 30px; color: #64b5f6;"></i></div>
+                        <div class="status-badge warning" style="font-size: 11px; padding: 3px 8px; background: #ff9800; color: white; display: inline-block; border-radius: 12px;">Rain Likely</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">72°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">63°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Scattered Showers</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 60%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 12 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 4</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 70°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Sun</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 9, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-sun" style="font-size: 30px; color: #ffc107;"></i></div>
+                        <div class="status-badge success" style="font-size: 11px; padding: 3px 8px; background: #4caf50; color: white; display: inline-block; border-radius: 12px;">Excellent</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">76°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">65°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Sunny</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 0%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 5 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 8</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 78°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Mon</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 10, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-sun" style="font-size: 30px; color: #ffc107;"></i></div>
+                        <div class="status-badge success" style="font-size: 11px; padding: 3px 8px; background: #4caf50; color: white; display: inline-block; border-radius: 12px;">Excellent</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">77°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">66°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Sunny</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 5%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 6 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 9</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 79°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Tue</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 11, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-cloud" style="font-size: 30px; color: #78909c;"></i></div>
+                        <div class="status-badge" style="font-size: 11px; padding: 3px 8px; background: #78909c; color: white; display: inline-block; border-radius: 12px;">Good</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">75°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">64°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Partly Cloudy</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 10%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 7 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 6</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 76°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Wed</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 12, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-cloud-sun-rain" style="font-size: 30px; color: #64b5f6;"></i></div>
+                        <div class="status-badge warning" style="font-size: 11px; padding: 3px 8px; background: #ff9800; color: white; display: inline-block; border-radius: 12px;">Plan Irrigation</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">74°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">65°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Scattered Showers</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 40%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 9 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 5</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 72°F</div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-card" style="min-width: 190px; flex: 0 0 auto;">
+                        <div class="forecast-day" style="font-weight: bold;">Thu</div>
+                        <div style="font-size: 14px; color: #555; margin-top: 3px;">Mar 13, 2025</div>
+                        <div class="forecast-icon" style="margin: 15px 0;"><i class="fas fa-cloud-showers-heavy" style="font-size: 30px; color: #1976d2;"></i></div>
+                        <div class="status-badge danger" style="font-size: 11px; padding: 3px 8px; background: #f44336; color: white; display: inline-block; border-radius: 12px;">Heavy Rain</div>
+                        <div class="forecast-temp" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                            <span class="high-temp" style="font-size: 18px; font-weight: 700;">70°F</span>
+                            <span class="low-temp" style="font-size: 18px; color: #757575;">61°F</span>
+                        </div>
+                        <div style="font-size: 13px; margin-top: 10px; color: #555;">Thunderstorms</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 15px;">
+                            <div style="font-size: 12px;"><i class="fas fa-tint" style="color: #2196f3;"></i> 80%</div>
+                            <div style="font-size: 12px;"><i class="fas fa-wind" style="color: #78909c;"></i> 15 mph</div>
+                            <div style="font-size: 12px;"><i class="fas fa-sun" style="color: #ff9800;"></i> UV: 3</div>
+                            <div style="font-size: 12px;"><i class="fas fa-thermometer-half" style="color: #f44336;"></i> Feels: 68°F</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-area"></i>
+                        Temperature Trends
+                    </h2>
+                </div>
+
+                <div class="chart-container weather-chart">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+
+                <div class="weather-stat-grid" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                    <div class="data-card">
+                        <h3 style="font-size: 16px; margin-bottom: 10px; color: #4caf50;"><i class="fas fa-thermometer-three-quarters" style="margin-right: 5px;"></i> Temperature Analysis</h3>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Average This Week</span>
+                            <span>74°F</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Compared to Normal</span>
+                            <span style="color: #f44336;">+2.5°F</span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 13px; color: #666;">Temperatures are running slightly above normal for this time of year.</div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3 style="font-size: 16px; margin-bottom: 10px; color: #2196f3;"><i class="fas fa-tint" style="margin-right: 5px;"></i> Humidity Analysis</h3>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Average This Week</span>
+                            <span>65%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Compared to Normal</span>
+                            <span style="color: #4caf50;">-2%</span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 13px; color: #666;">Humidity levels are within the optimal range for current crops.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-cloud-rain"></i>
+                        Precipitation Forecast
+                    </h2>
+                </div>
+
+                <div class="chart-container weather-chart">
+                    <canvas id="precipitationChart"></canvas>
+                </div>
+
+                <div class="weather-stat-grid">
+                    <div class="data-card">
+                        <h3 style="font-size: 16px; margin-bottom: 10px; color: #2196f3;"><i class="fas fa-umbrella" style="margin-right: 5px;"></i> Precipitation Forecast</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Today (Mar 7)</span>
+                                <span>0.0 in</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Saturday (Mar 8)</span>
+                                <span>0.5 in</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Wednesday (Mar 12)</span>
+                                <span>0.3 in</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Thursday (Mar 13)</span>
+                                <span>1.2 in</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e0e0e0; padding-top: 5px; margin-top: 5px;">
+                                <span><strong>Weekly Total</strong></span>
+                                <span><strong>2.0 in</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3 style="font-size: 16px; margin-bottom: 10px; color: #2196f3;"><i class="fas fa-thermometer-half" style="margin-right: 5px;"></i> Temperature Range</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>This Week High</span>
+                                <span>78°F (Mar 7)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>This Week Low</span>
+                                <span>61°F (Mar 13)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Avg Daytime</span>
+                                <span>74°F</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Avg Nighttime</span>
+                                <span>64°F</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e0e0e0; padding-top: 5px; margin-top: 5px;">
+                                <span><strong>Temperature Swing</strong></span>
+                                <span><strong>17°F</strong></span>
+                            </div>
+                        </div>
+                    </div                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Weather Alerts
+                    </h2>
+                </div>
+
+                <div class="weather-alert" style="background-color: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                    <div class="alert-title">
+                        <i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i>
+                        <span>Thunderstorm Watch</span>
+                    </div>
+                    <div style="font-size: 14px; margin-top: 10px;">
+                        <p>A thunderstorm watch has been issued for Thursday, March 13, 2025. Potential for heavy rain, lightning, and gusty winds. Some field operations may need to be rescheduled.</p>
+                        <p style="margin-top: 10px;"><strong>Issued by:</strong> National Weather Service</p>
+                        <p><strong>Valid:</strong> Thursday, Mar 13, 6:00 AM to 8:00 PM</p>
+                    </div>
+                </div>
+
+                <div class="weather-alert" style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                    <div class="alert-title">
+                        <i class="fas fa-info-circle" style="color: #2196f3;"></i>
+                        <span>Frost Advisory</span>
+                    </div>
+                    <div style="font-size: 14px; margin-top: 10px;">
+                        <p>A frost advisory has been issued for early next week. Temperatures may drop to near freezing overnight on Monday, March 17, 2025. Consider protective measures for sensitive crops.</p>
+                        <p style="margin-top: 10px;"><strong>Issued by:</strong> AgriSense Pro Weather Module</p>
+                        <p><strong>Valid:</strong> Monday, Mar 17, 2:00 AM to 8:00 AM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-tint"></i>
+                        Irrigation Recommendations
+                    </h2>
+                </div>
+
+                <div class="notification-list">
+                    <div class="notification-item">
+                        <div class="notification-icon" style="background-color: rgba(33, 150, 243, 0.2); color: #2196f3;">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Irrigation Recommendation</div>
+                            <div class="notification-text">Based on soil moisture readings and upcoming precipitation, delay irrigation for Corn Field A until Saturday evening to optimize water usage.</div>
+                            <div class="notification-time">Updated: Mar 7, 2025 9:30 AM</div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item">
+                        <div class="notification-icon" style="background-color: rgba(76, 175, 80, 0.2); color: #4caf50;">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">Crop Protection Alert</div>
+                            <div class="notification-text">Consider applying protective treatments to sensitive crops before Thursday's expected thunderstorms. Heavy rain may impact young seedlings.</div>
+                            <div class="notification-time">Updated: Mar 7, 2025 10:15 AM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; padding: 20px; background: rgba(33, 150, 243, 0.05); border-radius: 12px; border: 1px dashed rgba(33, 150, 243, 0.3);">
+                    <h3 style="font-size: 18px; margin-bottom: 15px; color: #0d47a1;">Water Conservation Analysis</h3>
+                    <p style="line-height: 1.6; margin-bottom: 15px;">Based on current soil moisture levels and upcoming precipitation forecasts, you can save approximately <strong>2,500 gallons</strong> of water this week by following these recommendations.</p>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; margin-top: 20px;">
+                        <div class="data-card">
+                            <div class="data-label">Water Savings</div>
+                            <div class="data-value">2,500 gal</div>
+                            <div style="font-size: 13px; color: #666;">This Week</div>
+                        </div>
+
+                        <div class="data-card">
+                            <div class="data-label">Cost Savings</div>
+                            <div class="data-value">$175</div>
+                            <div style="font-size: 13px; color: #666;">Estimated</div>
+                        </div>
+
+                        <div class="data-card">
+                            <div class="data-label">Natural Precipitation</div>
+                            <div class="data-value">2.0 in</div>
+                            <div style="font-size: 13px; color: #666;">Next 7 Days</div>
+                        </div>
+
+                        <div class="data-card">
+                            <div class="data-label">Optimized Schedule</div>
+                            <div class="data-value">Mar 15</div>
+                            <div style="font-size: 13px; color: #666;">Next Irrigation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-wind"></i>
+                        Wind & Spraying Conditions
+                    </h2>
+                </div>
+
+                <div class="chart-container weather-chart">
+                    <canvas id="windChart"></canvas>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px;">
+                    <h3 style="font-size: 16px; margin-bottom: 12px;">Spray Application Windows</h3>
+
+                    <div style="display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px;">
+                        <div style="min-width: 150px; background: #e8f5e9; padding: 10px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                            <div style="font-weight: bold;">Friday (Today)</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Mar 7, 2025</div>
+                            <div style="margin-top: 10px; font-size: 14px;"><i class="fas fa-check-circle" style="color: #4caf50;"></i> Favorable</div>
+                            <div style="font-size: 12px; margin-top: 5px;">6:00 AM - 10:00 AM</div>
+                            <div style="font-size: 12px; margin-top: 3px;">Wind: 3-5 mph</div>
+                        </div>
+
+                        <div style="min-width: 150px; background: #ffebee; padding: 10px; border-radius: 8px; border-left: 4px solid #f44336;">
+                            <div style="font-weight: bold;">Saturday</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Mar 8, 2025</div>
+                            <div style="margin-top: 10px; font-size: 14px;"><i class="fas fa-times-circle" style="color: #f44336;"></i> Unfavorable</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Precipitation</div>
+                            <div style="font-size: 12px; margin-top: 3px;">Wind: 10-15 mph</div>
+                        </div>
+
+                        <div style="min-width: 150px; background: #e8f5e9; padding: 10px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                            <div style="font-weight: bold;">Sunday</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Mar 9, 2025</div>
+                            <div style="margin-top: 10px; font-size: 14px;"><i class="fas fa-check-circle" style="color: #4caf50;"></i> Favorable</div>
+                            <div style="font-size: 12px; margin-top: 5px;">All Day</div>
+                            <div style="font-size: 12px; margin-top: 3px;">Wind: 2-4 mph</div>
+                        </div>
+
+                        <div style="min-width: 150px; background: #e8f5e9; padding: 10px; border-radius: 8px; border-left: 4px solid #4caf50;">
+                            <div style="font-weight: bold;">Monday</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Mar 10, 2025</div>
+                            <div style="margin-top: 10px; font-size: 14px;"><i class="fas fa-check-circle" style="color: #4caf50;"></i> Favorable</div>
+                            <div style="font-size: 12px; margin-top: 5px;">All Day</div>
+                            <div style="font-size: 12px; margin-top: 3px;">Wind: 3-5 mph</div>
+                        </div>
+
+                        <div style="min-width: 150px; background: #fff8e1; padding: 10px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                            <div style="font-weight: bold;">Tuesday</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Mar 11, 2025</div>
+                            <div style="margin-top: 10px; font-size: 14px;"><i class="fas fa-exclamation-circle" style="color: #ffc107;"></i> Marginal</div>
+                            <div style="font-size: 12px; margin-top: 5px;">Early Morning Only</div>
+                            <div style="font-size: 12px; margin-top: 3px;">Wind: 7-9 mph</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-sun"></i>
+                        Growing Degree Days
+                    </h2>
+                </div>
+
+                <div class="chart-container weather-chart">
+                    <canvas id="gddChart"></canvas>
+                </div>
+
+                <div class="weather-stat-grid" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                    <div class="data-card">
+                        <div class="data-label">Current GDD (Base 50°F)</div>
+                        <div class="data-value">385</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i> 24 from yesterday
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-label">GDD 7-Day Forecast</div>
+                        <div class="data-value">+168</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i> Accumulating steadily
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-label">Season Progress</div>
+                        <div class="data-value">28%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 28%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <div class="data-label">Compared to Average</div>
+                        <div class="data-value">+5%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i> Above normal
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <a href="index.html" class="nav-item" title="Farm Dashboard">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="sensors.html" class="nav-item" title="Sensor Management">
+                <i class="fas fa-microchip"></i>
+                <span>Sensors</span>
+            </a>
+            <a href="weather.html" class="nav-item active" title="Weather Command Station">
+                <i class="fas fa-cloud-sun"></i>
+                <span>Weather</span>
+            </a>
+            <a href="analytics.html" class="nav-item" title="Data Analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item" title="System Settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createTemperatureChart();
+            createPrecipitationChart();
+            createWindChart();
+            createGDDChart();
+        });
+
+        function createTemperatureChart() {
+            const ctx = document.getElementById('temperatureChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mar 7', 'Mar 8', 'Mar 9', 'Mar 10', 'Mar 11', 'Mar 12', 'Mar 13'],
+                    datasets: [
+                        {
+                            label: 'High Temp (°F)',
+                            data: [78, 72, 76, 77, 75, 74, 70],
+                            borderColor: 'rgba(244, 67, 54, 1)',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Low Temp (°F)',
+                            data: [65, 63, 65, 66, 64, 65, 61],
+                            borderColor: 'rgba(33, 150, 243, 1)',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Historical Avg (°F)',
+                            data: [72, 72, 73, 73, 72, 72, 71],
+                            borderColor: 'rgba(158, 158, 158, 1)',
+                            backgroundColor: 'rgba(158, 158, 158, 0.1)',
+                            fill: false,
+                            tension: 0.3,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 12 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '7-Day Temperature Forecast'
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            title: {
+                                display: true,
+                                text: 'Temperature (°F)'
+                            }
+                        },
+                        x: { 
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPrecipitationChart() {
+            const ctx = document.getElementById('precipitationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mar 7', 'Mar 8', 'Mar 9', 'Mar 10', 'Mar 11', 'Mar 12', 'Mar 13'],
+                    datasets: [
+                        {
+                            label: 'Precipitation (in)',
+                            data: [0, 0.5, 0, 0, 0, 0.3, 1.2],
+                            backgroundColor: 'rgba(33, 150, 243, 0.7)',
+                            borderColor: 'rgba(33, 150, 243, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Probability (%)',
+                            data: [20, 60, 0, 5, 10, 40, 80],
+                            backgroundColor: 'rgba(156, 39, 176, 0.5)',
+                            borderColor: 'rgba(156, 39, 176, 1)',
+                            borderWidth: 1,
+                            type: 'line',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 12 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '7-Day Precipitation Forecast'
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            title: {
+                                display: true,
+                                text: 'Precipitation (in)'
+                            },
+                            min: 0,
+                            max: 1.5
+                        },
+                        y1: {
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Probability (%)'
+                            },
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: { 
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createWindChart() {
+            const ctx = document.getElementById('windChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mar 7', 'Mar 8', 'Mar 9', 'Mar 10', 'Mar 11', 'Mar 12', 'Mar 13'],
+                    datasets: [
+                        {
+                            label: 'Wind Speed (mph)',
+                            data: [8, 12, 5, 6, 7, 9, 15],
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Gust Speed (mph)',
+                            data: [12, 18, 8, 10, 12, 15, 25],
+                            borderColor: 'rgba(255, 152, 0, 1)',
+                            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 12 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '7-Day Wind Forecast'
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: 10,
+                                    yMax: 10,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        enabled: true,
+                                        content: 'Spray Threshold'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            title: {
+                                display: true,
+                                text: 'Wind Speed (mph)'
+                            },
+                            min: 0
+                        },
+                        x: { 
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createGDDChart() {
+            const ctx = document.getElementById('gddChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mar 1', 'Mar 2', 'Mar 3', 'Mar 4', 'Mar 5', 'Mar 6', 'Mar 7', 'Mar 8', 'Mar 9', 'Mar 10', 'Mar 11', 'Mar 12', 'Mar 13'],
+                    datasets: [
+                        {
+                            label: 'Actual GDD (Base 50°F)',
+                            data: [320, 335, 345, 358, 365, 375, 385, null, null, null, null, null, null],
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Forecast GDD',
+                            data: [null, null, null, null, null, null, 385, 405, 425, 443, 461, 479, 497],
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            borderDash: [5, 5]
+                        },
+                        {
+                            label: 'Historical Average',
+                            data: [310, 323, 336, 349, 362, 372, 382, 392, 402, 412, 422, 432, 442],
+                            borderColor: 'rgba(158, 158, 158, 1)',
+                            backgroundColor: 'rgba(158, 158, 158, 0.1)',
+                            fill: false,
+                            tension: 0.3,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 12 }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Growing Degree Days (Base 50°F)'
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            title: {
+                                display: true,
+                                text: 'Cumulative GDD'
+                            },
+                            beginAtZero: false
+                        },
+                        x: { 
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshWeather() {
+            alert("Refreshing weather data...");
+            // In a real application, this would fetch updated weather data from an API
+            setTimeout(() => {
+                alert("Weather data refreshed successfully!");
+            }, 1500);
+        }
+
+        function exportWeatherData() {
+            alert("Exporting weather data. The download will start shortly.");
+            // In a real application, this would generate and download a file
+        }
+
+        function setAlerts() {
+            alert("This would open a dialog to configure weather alert settings.");
+            // In a real application, this would open a settings modal
+        }
+
+        function showWeatherSettings() {
+            alert("This would open weather settings to configure units, alert thresholds, etc.");
+            // In a real application, this would open a settings modal
+        }
+    </script>
+</body>
+</html>

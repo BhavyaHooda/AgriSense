@@ -1,0 +1,1580 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>AgriSense Pro - Advanced Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <div class="phone-frame" style="max-width: 100%; height: 100%;">
+        <div class="header">
+            <div class="header-title">
+                <i class="fas fa-chart-line"></i>
+                Farm Analytics
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="header-icon" title="Back to Dashboard"><i class="fas fa-home"></i></a>
+                <span class="header-icon" onclick="exportAnalytics()" title="Export Analytics"><i class="fas fa-file-export"></i></span>
+                <span class="header-icon" onclick="refreshData()" title="Refresh Data"><i class="fas fa-sync-alt"></i></span>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search analytics data..." id="analyticsSearch">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        
+        <div class="content" style="max-width: 100%;">
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-filter"></i>
+                        Data Filters
+                    </div>
+                    <div class="action-buttons">
+                        <span class="btn" onclick="applyFilters()">Apply</span>
+                        <span class="btn" onclick="resetFilters()">Reset</span>
+                    </div>
+                </div>
+                
+                <div class="analytics-filter">
+                    <div class="filter-group">
+                        <label for="dateRange">Date Range:</label>
+                        <select id="dateRange" class="settings-select">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Last Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="cropType">Crop Type:</label>
+                        <select id="cropType" class="settings-select">
+                            <option value="all" selected>All Crops</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="corn">Corn</option>
+                            <option value="soybeans">Soybeans</option>
+                            <option value="cotton">Cotton</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sensorGroup">Sensor Group:</label>
+                        <select id="sensorGroup" class="settings-select">
+                            <option value="all" selected>All Sensors</option>
+                            <option value="soil">Soil Sensors</option>
+                            <option value="weather">Weather Stations</option>
+                            <option value="irrigation">Irrigation Systems</option>
+                            <option value="drone">Drone Data</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="dataResolution">Resolution:</label>
+                        <select id="dataResolution" class="settings-select">
+                            <option value="hour">Hourly</option>
+                            <option value="day" selected>Daily</option>
+                            <option value="week">Weekly</option>
+                            <option value="month">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="custom-date-range" style="display: none; margin-top: 10px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                        <div>
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" class="settings-input" value="2025-02-06">
+                        </div>
+                        <div>
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" class="settings-input" value="2025-03-06">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Performance Overview
+                    </div>
+                    <div class="action-buttons">
+                        <span class="btn info" onclick="viewFullReport()">Full Report</span>
+                    </div>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card" onclick="showMetricDetail('yield')">
+                        <div class="analytics-label">Average Yield</div>
+                        <div class="analytics-value">92.7%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>4.2% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('moisture')">
+                        <div class="analytics-label">Soil Moisture</div>
+                        <div class="analytics-value">68.3%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>2.1% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('health')">
+                        <div class="analytics-label">Crop Health Index</div>
+                        <div class="analytics-value">87.5</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>3.8% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('water')">
+                        <div class="analytics-label">Water Usage</div>
+                        <div class="analytics-value">24.6K</div>
+                        <div class="trend-indicator trend-down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>6.3% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('nutrients')">
+                        <div class="analytics-label">Nutrient Efficiency</div>
+                        <div class="analytics-value">91.2%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>1.7% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('pests')">
+                        <div class="analytics-label">Pest Activity</div>
+                        <div class="analytics-value">12.3</div>
+                        <div class="trend-indicator trend-down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>8.4% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('growth')">
+                        <div class="analytics-label">Growth Rate</div>
+                        <div class="analytics-value">+4.8%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0.6% vs. last period</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card" onclick="showMetricDetail('sensors')">
+                        <div class="analytics-label">Sensor Health</div>
+                        <div class="analytics-value">98.1%</div>
+                        <div class="trend-indicator trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0.8% vs. last period</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-chart-area"></i>
+                        Yield Forecast
+                    </div>
+                    <div class="action-buttons">
+                        <div class="btn-group">
+                            <span class="btn active-btn" data-chart="yield">Yield</span>
+                            <span class="btn" data-chart="area">Area</span>
+                            <span class="btn" data-chart="comparison">Comparison</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="yieldChart"></canvas>
+                </div>
+                
+                <div class="forecast-stats">
+                    <div class="forecast-stat-item">
+                        <span class="forecast-label">Predicted Harvest Date:</span>
+                        <span class="forecast-value">August 28, 2025</span>
+                    </div>
+                    <div class="forecast-stat-item">
+                        <span class="forecast-label">Estimated Yield:</span>
+                        <span class="forecast-value">4.82 tons/acre</span>
+                    </div>
+                    <div class="forecast-stat-item">
+                        <span class="forecast-label">Confidence Level:</span>
+                        <span class="forecast-value">87%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-seedling"></i>
+                        Crop Performance Analysis
+                    </div>
+                    <div class="action-buttons">
+                        <div class="btn-group">
+                            <span class="btn active-btn" data-crop="all">All Crops</span>
+                            <span class="btn" data-crop="wheat">Wheat</span>
+                            <span class="btn" data-crop="corn">Corn</span>
+                            <span class="btn" data-crop="soy">Soybeans</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="cropPerformanceChart"></canvas>
+                </div>
+                
+                <div class="crop-metrics">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                        <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
+                            <div class="crop-metric-title">Wheat</div>
+                            <div class="crop-metric-value">94.2%</div>
+                            <div class="crop-metric-label">Growth Progress</div>
+                            <div class="status-badge success">On Track</div>
+                        </div>
+                        
+                        <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
+                            <div class="crop-metric-title">Corn</div>
+                            <div class="crop-metric-value">87.5%</div>
+                            <div class="crop-metric-label">Growth Progress</div>
+                            <div class="status-badge success">On Track</div>
+                        </div>
+                        
+                        <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
+                            <div class="crop-metric-title">Soybeans</div>
+                            <div class="crop-metric-value">79.8%</div>
+                            <div class="crop-metric-label">Growth Progress</div>
+                            <div class="status-badge warning">Needs Attention</div>
+                        </div>
+                        
+                        <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
+                            <div class="crop-metric-title">Cotton</div>
+                            <div class="crop-metric-value">92.3%</div>
+                            <div class="crop-metric-label">Growth Progress</div>
+                            <div class="status-badge success">On Track</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-temperature-high"></i>
+                        Environmental Impact
+                    </div>
+                    <div class="action-buttons">
+                        <span class="btn" onclick="generateReport('environment')">Generate Report</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="environmentChart"></canvas>
+                </div>
+                
+                <div class="impact-metrics" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                    <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
+                        <i class="fas fa-water impact-icon" style="color: #2196f3;"></i>
+                        <div class="impact-details">
+                            <div class="impact-title">Water Conservation</div>
+                            <div class="impact-value">+42.3%</div>
+                            <div class="impact-desc">Water saved compared to traditional methods</div>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
+                        <i class="fas fa-leaf impact-icon" style="color: #4caf50;"></i>
+                        <div class="impact-details">
+                            <div class="impact-title">Carbon Footprint</div>
+                            <div class="impact-value">-18.7%</div>
+                            <div class="impact-desc">Reduction in carbon emissions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
+                        <i class="fas fa-flask impact-icon" style="color: #ff9800;"></i>
+                        <div class="impact-details">
+                            <div class="impact-title">Chemical Usage</div>
+                            <div class="impact-value">-38.2%</div>
+                            <div class="impact-desc">Reduction in chemical fertilizers and pesticides</div>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
+                        <i class="fas fa-sun impact-icon" style="color: #ffc107;"></i>
+                        <div class="impact-details">
+                            <div class="impact-title">Energy Efficiency</div>
+                            <div class="impact-value">+27.5%</div>
+                            <div class="impact-desc">Improvement in energy utilization</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-user-check"></i>
+                        Resource Optimization
+                    </div>
+                    <div class="action-buttons">
+                        <span class="btn" onclick="optimizeResources()">Optimize</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="resourceChart"></canvas>
+                </div>
+                
+                <div class="resource-recommendations" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
+                        <div class="recommendation-header">
+                            <i class="fas fa-tint" style="color: #2196f3;"></i>
+                            <span>Irrigation Recommendation</span>
+                        </div>
+                        <div class="recommendation-body">
+                            <p>Reduce irrigation in North Fields by 15% (8,500 gallons savings)</p>
+                            <div class="recommendation-metrics">
+                                <span class="savings-badge">$420 Monthly Savings</span>
+                                <span class="efficiency-badge">94% Efficiency</span>
+                            </div>
+                            <button class="recommendation-action-btn">Apply Changes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
+                        <div class="recommendation-header">
+                            <i class="fas fa-flask" style="color: #ff9800;"></i>
+                            <span>Fertilizer Optimization</span>
+                        </div>
+                        <div class="recommendation-body">
+                            <p>Adjust nitrogen application in East Wheat Fields by -12%</p>
+                            <div class="recommendation-metrics">
+                                <span class="savings-badge">$385 Monthly Savings</span>
+                                <span class="efficiency-badge">89% Efficiency</span>
+                            </div>
+                            <button class="recommendation-action-btn">Apply Changes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
+                        <div class="recommendation-header">
+                            <i class="fas fa-shield-alt" style="color: #f44336;"></i>
+                            <span>Pest Management</span>
+                        </div>
+                        <div class="recommendation-body">
+                            <p>Schedule targeted treatment for Western Corn Fields (24 acres)</p>
+                            <div class="recommendation-metrics">
+                                <span class="savings-badge">$275 Monthly Savings</span>
+                                <span class="sustainability-badge">78% Less Chemicals</span>
+                            </div>
+                            <button class="recommendation-action-btn">Schedule Treatment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Seasonal Insights
+                    </div>
+                    <div class="action-buttons">
+                        <div class="btn-group">
+                            <span class="btn active-btn" data-season="current">Current</span>
+                            <span class="btn" data-season="historical">Historical</span>
+                            <span class="btn" data-season="forecast">Forecast</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="seasonalChart"></canvas>
+                </div>
+                
+                <div class="seasonal-highlights" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
+                    <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
+                        <div class="highlight-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="highlight-content">
+                            <div class="highlight-title">Key Insight</div>
+                            <div class="highlight-text">Crop growth rate is 12.4% ahead of the 5-year average</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
+                        <div class="highlight-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="highlight-content">
+                            <div class="highlight-title">Risk Factor</div>
+                            <div class="highlight-text">Potential drought conditions forecasted for late June</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
+                        <div class="highlight-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div class="highlight-content">
+                            <div class="highlight-title">Opportunity</div>
+                            <div class="highlight-text">Optimal harvesting window predicted for August 15-28</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-dollar-sign"></i>
+                        Financial Projection
+                    </div>
+                    <div class="action-buttons">
+                        <span class="btn" onclick="exportFinancialReport()">Export</span>
+                    </div>
+                </div>
+                
+                <div class="financial-summary" style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; justify-content: space-between;">
+                    <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
+                        <div class="financial-value">$843,200</div>
+                        <div class="financial-label">Projected Revenue</div>
+                        <div class="financial-change positive">+8.4% YoY</div>
+                    </div>
+                    
+                    <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
+                        <div class="financial-value">$378,500</div>
+                        <div class="financial-label">Operating Costs</div>
+                        <div class="financial-change negative">+2.1% YoY</div>
+                    </div>
+                    
+                    <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
+                        <div class="financial-value">$464,700</div>
+                        <div class="financial-label">Projected Profit</div>
+                        <div class="financial-change positive">+14.3% YoY</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container analytics-chart">
+                    <canvas id="financialChart"></canvas>
+                </div>
+                
+                <div class="financial-breakdown">
+                    <div class="breakdown-header">Cost Breakdown</div>
+                    <div class="breakdown-items">
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">Labor</div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" style="width: 32%; background-color: #f44336;"></div>
+                            </div>
+                            <div class="breakdown-value">32%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">Equipment</div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" style="width: 28%; background-color: #2196f3;"></div>
+                            </div>
+                            <div class="breakdown-value">28%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">Supplies</div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" style="width: 22%; background-color: #4caf50;"></div>
+                            </div>
+                            <div class="breakdown-value">22%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">Utilities</div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" style="width: 10%; background-color: #ff9800;"></div>
+                            </div>
+                            <div class="breakdown-value">10%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-label">Other</div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill" style="width: 8%; background-color: #9c27b0;"></div>
+                            </div>
+                            <div class="breakdown-value">8%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-bar">
+            <a href="index.html" class="nav-item" title="Farm Dashboard">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="sensors.html" class="nav-item" title="Sensor Management">
+                <i class="fas fa-microchip"></i>
+                <span>Sensors</span>
+            </a>
+            <a href="weather.html" class="nav-item" title="Weather Command Station">
+                <i class="fas fa-cloud-sun"></i>
+                <span>Weather</span>
+            </a>
+            <a href="analytics.html" class="nav-item active" title="Data Analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="settings.html" class="nav-item" title="System Settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupDateRangeListener();
+            setupButtonGroups();
+            
+            // Set the current date in the UI
+            document.querySelectorAll('.current-date').forEach(el => {
+                el.textContent = new Date().toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            });
+        });
+        
+        function setupDateRangeListener() {
+            const dateRangeSelect = document.getElementById('dateRange');
+            const customDateRange = document.querySelector('.custom-date-range');
+            
+            if (dateRangeSelect && customDateRange) {
+                dateRangeSelect.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        customDateRange.style.display = 'block';
+                    } else {
+                        customDateRange.style.display = 'none';
+                    }
+                });
+            }
+        }
+        
+        function setupButtonGroups() {
+            document.querySelectorAll('.btn-group').forEach(group => {
+                const buttons = group.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons in this group
+                        buttons.forEach(btn => btn.classList.remove('active-btn'));
+                        // Add active class to clicked button
+                        this.classList.add('active-btn');
+                        
+                        // Handle any specific logic based on the button clicked
+                        if (this.dataset.chart) {
+                            updateChartView(this.dataset.chart);
+                        } else if (this.dataset.crop) {
+                            updateCropView(this.dataset.crop);
+                        } else if (this.dataset.season) {
+                            updateSeasonView(this.dataset.season);
+                        }
+                    });
+                });
+            });
+        }
+        
+        function initializeCharts() {
+            // Yield Forecast Chart
+            const yieldCtx = document.getElementById('yieldChart');
+            if (yieldCtx) {
+                const yieldChart = new Chart(yieldCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Feb 6', 'Feb 13', 'Feb 20', 'Feb 27', 'Mar 6', 'Mar 13', 'Mar 20', 'Mar 27', 'Apr 3', 'Apr 10', 'Apr 17'],
+                        datasets: [{
+                            label: 'Actual Yield',
+                            data: [65, 68, 72, 75, 79, 82, null, null, null, null, null],
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Forecasted Yield',
+                            data: [null, null, null, null, 79, 83, 86, 89, 92, 94, 97],
+                            borderColor: '#2196f3',
+                            borderDash: [5, 5],
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 60,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Yield Percentage'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Crop Performance Chart
+            const cropCtx = document.getElementById('cropPerformanceChart');
+            if (cropCtx) {
+                const cropChart = new Chart(cropCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Wheat', 'Corn', 'Soybeans', 'Cotton'],
+                        datasets: [{
+                            label: 'Current Growth',
+                            data: [94.2, 87.5, 79.8, 92.3],
+                            backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Expected Growth',
+                            data: [90, 85, 88, 90],
+                            backgroundColor: 'rgba(33, 150, 243, 0.4)',
+                            borderColor: 'rgba(33, 150, 243, 1)',
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Growth Percentage'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Crop Type'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Environmental Impact Chart
+            const envCtx = document.getElementById('environmentChart');
+            if (envCtx) {
+                const envChart = new Chart(envCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Water Usage', 'Carbon Footprint', 'Chemical Usage', 'Energy Efficiency', 'Soil Health', 'Biodiversity'],
+                        datasets: [{
+                            label: 'Current Practice',
+                            data: [85, 80, 75, 88, 82, 78],
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            pointBackgroundColor: 'rgba(76, 175, 80, 1)',
+                            pointRadius: 4
+                        }, {
+                            label: 'Traditional Practice',
+                            data: [60, 65, 55, 70, 62, 58],
+                            backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                            borderColor: 'rgba(244, 67, 54, 1)',
+                            pointBackgroundColor: 'rgba(244, 67, 54, 1)',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Resource Optimization Chart
+            const resourceCtx = document.getElementById('resourceChart');
+            if (resourceCtx) {
+                const resourceChart = new Chart(resourceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Feb 6', 'Feb 13', 'Feb 20', 'Feb 27', 'Mar 6', 'Mar 13', 'Mar 20'],
+                        datasets: [{
+                            label: 'Water Usage',
+                            data: [24000, 23500, 22800, 22200, 21500, 20800, 20200],
+                            borderColor: '#2196f3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            fill: true
+                        }, {
+                            label: 'Fertilizer Usage',
+                            data: [450, 440, 430, 425, 410, 400, 385],
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Water (gallons)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Fertilizer (lbs)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Seasonal Insights Chart
+            const seasonalCtx = document.getElementById('seasonalChart');
+            if (seasonalCtx) {
+                const seasonalChart = new Chart(seasonalCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Current Year',
+                            data: [null, 62, 78, null, null, null, null, null, null, null, null, null],
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: '5-Year Average',
+                            data: [55, 57, 65, 72, 80, 87, 92, 95, 90, 82, 75, 60],
+                            borderColor: '#2196f3',
+                            borderDash: [5, 5],
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Crop Performance Index'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Financial Chart
+            const financialCtx = document.getElementById('financialChart');
+            if (financialCtx) {
+                const financialChart = new Chart(financialCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'],
+                        datasets: [{
+                            label: 'Revenue',
+                            data: [180000, 245000, 290000, 128200],
+                            backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                            borderColor: 'rgba(76, 175, 80, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Expenses',
+                            data: [85000, 110000, 125000, 58500],
+                            backgroundColor: 'rgba(244, 67, 54, 0.7)',
+                            borderColor: 'rgba(244, 67, 54, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Profit',
+                            data: [95000, 135000, 165000, 69700],
+                            backgroundColor: 'rgba(33, 150, 243, 0.7)',
+                            borderColor: 'rgba(33, 150, 243, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Amount ($)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Quarter'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD'
+                                            }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        function updateChartView(chartType) {
+            console.log(`Updating chart view to: ${chartType}`);
+            
+            // In a real application, this would update the chart with specific data
+            // For this example, we're just logging the action
+            
+            // You could swap chart data here based on the selected type
+            // For example:
+            if (chartType === 'area') {
+                // Update chart to show area-based data
+            } else if (chartType === 'comparison') {
+                // Update chart to show comparison data
+            } else {
+                // Default to yield data
+            }
+        }
+        
+        function updateCropView(cropType) {
+            console.log(`Updating crop view to: ${cropType}`);
+            
+            // In a real application, this would filter the chart to show only the selected crop
+            // For this example, we're just logging the action
+            
+            // Example implementation could be:
+            if (cropType === 'all') {
+                // Show all crops data
+            } else {
+                // Filter to show only the selected crop type
+            }
+        }
+        
+        function updateSeasonView(seasonType) {
+            console.log(`Updating seasonal view to: ${seasonType}`);
+            
+            // In a real application, this would update the seasonal insights chart
+            // For this example, we're just logging the action
+            
+            // Example implementation could be:
+            if (seasonType === 'historical') {
+                // Show historical season data
+            } else if (seasonType === 'forecast') {
+                // Show forecasted season data
+            } else {
+                // Show current season data
+            }
+        }
+        
+        function showMetricDetail(metric) {
+            console.log(`Showing details for: ${metric}`);
+            
+            // In a real application, this would show a modal with detailed information
+            // For this example, we're just logging the action
+            
+            alert(`Detailed information for ${metric} metric would be shown here.`);
+        }
+        
+        function viewFullReport() {
+            console.log("Viewing full performance report");
+            
+            // In a real application, this would navigate to a detailed report page
+            // For this example, we're just logging the action
+            
+            alert("Full performance report would be displayed here.");
+        }
+        
+        function generateReport(type) {
+            console.log(`Generating ${type} report`);
+            
+            // In a real application, this would generate a downloadable report
+            // For this example, we're just logging the action
+            
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} report is being generated. It will be available for download shortly.`);
+        }
+        
+        function optimizeResources() {
+            console.log("Optimizing resources");
+            
+            // In a real application, this would run an optimization algorithm
+            // For this example, we're just logging the action
+            
+            alert("Resource optimization calculation in progress.\n\nThis may take a few moments...");
+            
+            // Simulate a delay for the calculation
+            setTimeout(() => {
+                alert("Resource optimization complete. New recommendations generated.");
+            }, 2000);
+        }
+        
+        function exportAnalytics() {
+            console.log("Exporting analytics data");
+            
+            // In a real application, this would export the data
+            // For this example, we're just logging the action
+            
+            const format = prompt("Select export format (CSV, PDF, Excel):", "CSV");
+            if (format) {
+                alert(`Analytics data will be exported in ${format} format. Download will begin shortly.`);
+            }
+        }
+        
+        function exportFinancialReport() {
+            console.log("Exporting financial report");
+            
+            // In a real application, this would export the financial report
+            // For this example, we're just logging the action
+            
+            alert("Financial report will be exported as PDF. Download will begin shortly.");
+        }
+        
+        function refreshData() {
+            console.log("Refreshing analytics data");
+            
+            // In a real application, this would refresh the data from the server
+            // For this example, we're just logging the action
+            
+            alert("Refreshing data...");
+            
+            // Simulate a delay for the refresh
+            setTimeout(() => {
+                alert("Data refreshed successfully.");
+                // Reload the page to simulate data refresh
+                // In a real app, you would just update the charts
+                // location.reload();
+            }, 1500);
+        }
+        
+        function applyFilters() {
+            const dateRange = document.getElementById('dateRange').value;
+            const cropType = document.getElementById('cropType').value;
+            const sensorGroup = document.getElementById('sensorGroup').value;
+            const dataResolution = document.getElementById('dataResolution').value;
+            
+            console.log("Applying filters:", {
+                dateRange, cropType, sensorGroup, dataResolution
+            });
+            
+            if (dateRange === 'custom') {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                console.log("Custom date range:", startDate, "to", endDate);
+            }
+            
+            // In a real application, this would update all charts and data
+            // For this example, we're just logging the action
+            
+            alert("Filters applied. Data updated.");
+        }
+        
+        function resetFilters() {
+            // Reset all filter dropdowns to their default values
+            document.getElementById('dateRange').value = '30';
+            document.getElementById('cropType').value = 'all';
+            document.getElementById('sensorGroup').value = 'all';
+            document.getElementById('dataResolution').value = 'day';
+            
+            // Hide custom date range if it's visible
+            document.querySelector('.custom-date-range').style.display = 'none';
+            
+            console.log("Filters reset to defaults");
+            
+            // In a real application, this would refresh the data with default filters
+            // For this example, we're just logging the action
+            
+            alert("Filters reset to default values. Data updated.");
+        }
+    </script>
+    
+    <style>
+        /* Inline styles for analytics page enhancements */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-right: 15px;
+            min-width: 150px;
+        }
+        
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .analytics-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-group .btn {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+            background: #757575;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-group .btn.active-btn {
+            background: var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .analytics-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        
+        .analytics-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 10px 0;
+        }
+        
+        .analytics-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .trend-up {
+            color: var(--success-color);
+        }
+        
+        .trend-down {
+            color: var(--danger-color);
+        }
+        
+        .forecast-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 15px;
+            background: rgba(0,0,0,0.02);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .forecast-stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            min-width: 150px;
+        }
+        
+        .forecast-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        
+        .forecast-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .crop-metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .crop-metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .crop-metric-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .crop-metric-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .crop-metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        
+        .crop-metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .impact-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .impact-metric-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .impact-metric-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .impact-icon {
+            font-size: 28px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.03);
+        }
+        
+        .impact-details {
+            flex: 1;
+        }
+        
+        .impact-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .impact-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .impact-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .resource-recommendations {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .resource-recommendation-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .resource-recommendation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .recommendation-header {
+            padding: 12px 15px;
+            background: #f5f5f5;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .recommendation-body {
+            padding: 15px;
+        }
+        
+        .recommendation-metrics {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .savings-badge, .efficiency-badge, .sustainability-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .savings-badge {
+            background: #4caf50;
+        }
+        
+        .efficiency-badge {
+            background: #2196f3;
+        }
+        
+        .sustainability-badge {
+            background: #9c27b0;
+        }
+        
+        .recommendation-action-btn {
+            padding: 6px 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background 0.3s;
+        }
+        
+        .recommendation-action-btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .seasonal-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .highlight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .highlight-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .highlight-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f0f4f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        
+        .highlight-content {
+            flex: 1;
+        }
+        
+        .highlight-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .highlight-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .financial-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .financial-metric {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .financial-metric:hover {
+            transform: translateY(-3px);
+        }
+        
+        .financial-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+        
+        .financial-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        
+        .financial-change {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .financial-change.positive {
+            color: var(--success-color);
+        }
+        
+        .financial-change.negative {
+            color: var(--danger-color);
+        }
+        
+        .financial-breakdown {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.02);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .breakdown-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .breakdown-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .breakdown-label {
+            width: 100px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .breakdown-bar {
+            flex: 1;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .breakdown-fill {
+            height: 100%;
+            border-radius: 6px;
+        }
+        
+        .breakdown-value {
+            width: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-group {
+                min-width: 120px;
+            }
+            
+            .analytics-card {
+                padding: 10px;
+            }
+            
+            .financial-summary, 
+            .crop-metric-grid, 
+            .seasonal-highlights {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .impact-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
