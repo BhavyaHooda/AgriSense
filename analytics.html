@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +26,7 @@
             <input type="text" placeholder="Search analytics data..." id="analyticsSearch">
             <i class="fas fa-search search-icon"></i>
         </div>
-        
+
         <div class="content" style="max-width: 100%;">
             <div class="section">
                 <div class="section-header">
@@ -40,7 +39,7 @@
                         <span class="btn" onclick="resetFilters()">Reset</span>
                     </div>
                 </div>
-                
+
                 <div class="analytics-filter">
                     <div class="filter-group">
                         <label for="dateRange">Date Range:</label>
@@ -52,7 +51,7 @@
                             <option value="custom">Custom Range</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="cropType">Crop Type:</label>
                         <select id="cropType" class="settings-select">
@@ -63,7 +62,7 @@
                             <option value="cotton">Cotton</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="sensorGroup">Sensor Group:</label>
                         <select id="sensorGroup" class="settings-select">
@@ -74,7 +73,7 @@
                             <option value="drone">Drone Data</option>
                         </select>
                     </div>
-                    
+
                     <div class="filter-group">
                         <label for="dataResolution">Resolution:</label>
                         <select id="dataResolution" class="settings-select">
@@ -85,7 +84,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="custom-date-range" style="display: none; margin-top: 10px;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
                         <div>
@@ -99,7 +98,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -110,7 +109,7 @@
                         <span class="btn info" onclick="viewFullReport()">Full Report</span>
                     </div>
                 </div>
-                
+
                 <div class="analytics-grid">
                     <div class="analytics-card" onclick="showMetricDetail('yield')">
                         <div class="analytics-label">Average Yield</div>
@@ -120,7 +119,7 @@
                             <span>4.2% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('moisture')">
                         <div class="analytics-label">Soil Moisture</div>
                         <div class="analytics-value">68.3%</div>
@@ -129,7 +128,7 @@
                             <span>2.1% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('health')">
                         <div class="analytics-label">Crop Health Index</div>
                         <div class="analytics-value">87.5</div>
@@ -138,7 +137,7 @@
                             <span>3.8% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('water')">
                         <div class="analytics-label">Water Usage</div>
                         <div class="analytics-value">24.6K</div>
@@ -147,7 +146,7 @@
                             <span>6.3% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('nutrients')">
                         <div class="analytics-label">Nutrient Efficiency</div>
                         <div class="analytics-value">91.2%</div>
@@ -156,7 +155,7 @@
                             <span>1.7% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('pests')">
                         <div class="analytics-label">Pest Activity</div>
                         <div class="analytics-value">12.3</div>
@@ -165,7 +164,7 @@
                             <span>8.4% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('growth')">
                         <div class="analytics-label">Growth Rate</div>
                         <div class="analytics-value">+4.8%</div>
@@ -174,7 +173,7 @@
                             <span>0.6% vs. last period</span>
                         </div>
                     </div>
-                    
+
                     <div class="analytics-card" onclick="showMetricDetail('sensors')">
                         <div class="analytics-label">Sensor Health</div>
                         <div class="analytics-value">98.1%</div>
@@ -185,7 +184,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -200,11 +199,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="chart-container analytics-chart">
                     <canvas id="yieldChart"></canvas>
                 </div>
-                
+
                 <div class="forecast-stats">
                     <div class="forecast-stat-item">
                         <span class="forecast-label">Predicted Harvest Date:</span>
@@ -220,7 +219,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -236,11 +235,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="chart-container analytics-chart">
                     <canvas id="cropPerformanceChart"></canvas>
                 </div>
-                
+
                 <div class="crop-metrics">
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
                         <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
@@ -249,21 +248,21 @@
                             <div class="crop-metric-label">Growth Progress</div>
                             <div class="status-badge success">On Track</div>
                         </div>
-                        
+
                         <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
                             <div class="crop-metric-title">Corn</div>
                             <div class="crop-metric-value">87.5%</div>
                             <div class="crop-metric-label">Growth Progress</div>
                             <div class="status-badge success">On Track</div>
                         </div>
-                        
+
                         <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
                             <div class="crop-metric-title">Soybeans</div>
                             <div class="crop-metric-value">79.8%</div>
                             <div class="crop-metric-label">Growth Progress</div>
                             <div class="status-badge warning">Needs Attention</div>
                         </div>
-                        
+
                         <div class="crop-metric-card" style="flex: 1; min-width: 200px; max-width: calc(25% - 12px);">
                             <div class="crop-metric-title">Cotton</div>
                             <div class="crop-metric-value">92.3%</div>
@@ -273,7 +272,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -284,11 +283,11 @@
                         <span class="btn" onclick="generateReport('environment')">Generate Report</span>
                     </div>
                 </div>
-                
+
                 <div class="chart-container analytics-chart">
                     <canvas id="environmentChart"></canvas>
                 </div>
-                
+
                 <div class="impact-metrics" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
                     <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
                         <i class="fas fa-water impact-icon" style="color: #2196f3;"></i>
@@ -298,7 +297,7 @@
                             <div class="impact-desc">Water saved compared to traditional methods</div>
                         </div>
                     </div>
-                    
+
                     <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
                         <i class="fas fa-leaf impact-icon" style="color: #4caf50;"></i>
                         <div class="impact-details">
@@ -307,7 +306,7 @@
                             <div class="impact-desc">Reduction in carbon emissions</div>
                         </div>
                     </div>
-                    
+
                     <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
                         <i class="fas fa-flask impact-icon" style="color: #ff9800;"></i>
                         <div class="impact-details">
@@ -316,7 +315,7 @@
                             <div class="impact-desc">Reduction in chemical fertilizers and pesticides</div>
                         </div>
                     </div>
-                    
+
                     <div class="impact-metric-item" style="flex: 1; min-width: 280px; max-width: calc(50% - 8px);">
                         <i class="fas fa-sun impact-icon" style="color: #ffc107;"></i>
                         <div class="impact-details">
@@ -327,70 +326,7 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-user-check"></i>
-                        Resource Optimization
-                    </div>
-                    <div class="action-buttons">
-                        <span class="btn" onclick="optimizeResources()">Optimize</span>
-                    </div>
-                </div>
-                
-                <div class="chart-container analytics-chart">
-                    <canvas id="resourceChart"></canvas>
-                </div>
-                
-                <div class="resource-recommendations" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
-                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
-                        <div class="recommendation-header">
-                            <i class="fas fa-tint" style="color: #2196f3;"></i>
-                            <span>Irrigation Recommendation</span>
-                        </div>
-                        <div class="recommendation-body">
-                            <p>Reduce irrigation in North Fields by 15% (8,500 gallons savings)</p>
-                            <div class="recommendation-metrics">
-                                <span class="savings-badge">$420 Monthly Savings</span>
-                                <span class="efficiency-badge">94% Efficiency</span>
-                            </div>
-                            <button class="recommendation-action-btn">Apply Changes</button>
-                        </div>
-                    </div>
-                    
-                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
-                        <div class="recommendation-header">
-                            <i class="fas fa-flask" style="color: #ff9800;"></i>
-                            <span>Fertilizer Optimization</span>
-                        </div>
-                        <div class="recommendation-body">
-                            <p>Adjust nitrogen application in East Wheat Fields by -12%</p>
-                            <div class="recommendation-metrics">
-                                <span class="savings-badge">$385 Monthly Savings</span>
-                                <span class="efficiency-badge">89% Efficiency</span>
-                            </div>
-                            <button class="recommendation-action-btn">Apply Changes</button>
-                        </div>
-                    </div>
-                    
-                    <div class="resource-recommendation-card" style="flex: 1; min-width: 280px; max-width: calc(33.33% - 10px);">
-                        <div class="recommendation-header">
-                            <i class="fas fa-shield-alt" style="color: #f44336;"></i>
-                            <span>Pest Management</span>
-                        </div>
-                        <div class="recommendation-body">
-                            <p>Schedule targeted treatment for Western Corn Fields (24 acres)</p>
-                            <div class="recommendation-metrics">
-                                <span class="savings-badge">$275 Monthly Savings</span>
-                                <span class="sustainability-badge">78% Less Chemicals</span>
-                            </div>
-                            <button class="recommendation-action-btn">Schedule Treatment</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -405,11 +341,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="chart-container analytics-chart">
                     <canvas id="seasonalChart"></canvas>
                 </div>
-                
+
                 <div class="seasonal-highlights" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between;">
                     <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
                         <div class="highlight-icon"><i class="fas fa-bolt"></i></div>
@@ -418,7 +354,7 @@
                             <div class="highlight-text">Crop growth rate is 12.4% ahead of the 5-year average</div>
                         </div>
                     </div>
-                    
+
                     <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
                         <div class="highlight-icon"><i class="fas fa-exclamation-triangle"></i></div>
                         <div class="highlight-content">
@@ -426,7 +362,7 @@
                             <div class="highlight-text">Potential drought conditions forecasted for late June</div>
                         </div>
                     </div>
-                    
+
                     <div class="highlight-card" style="flex: 1; min-width: 250px; max-width: calc(33.33% - 10px);">
                         <div class="highlight-icon"><i class="fas fa-lightbulb"></i></div>
                         <div class="highlight-content">
@@ -436,7 +372,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">
@@ -447,31 +383,31 @@
                         <span class="btn" onclick="exportFinancialReport()">Export</span>
                     </div>
                 </div>
-                
+
                 <div class="financial-summary" style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; justify-content: space-between;">
                     <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
                         <div class="financial-value">$843,200</div>
                         <div class="financial-label">Projected Revenue</div>
                         <div class="financial-change positive">+8.4% YoY</div>
                     </div>
-                    
+
                     <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
                         <div class="financial-value">$378,500</div>
                         <div class="financial-label">Operating Costs</div>
                         <div class="financial-change negative">+2.1% YoY</div>
                     </div>
-                    
+
                     <div class="financial-metric" style="flex: 1; min-width: 200px; max-width: calc(33.33% - 10px);">
                         <div class="financial-value">$464,700</div>
                         <div class="financial-label">Projected Profit</div>
                         <div class="financial-change positive">+14.3% YoY</div>
                     </div>
                 </div>
-                
+
                 <div class="chart-container analytics-chart">
                     <canvas id="financialChart"></canvas>
                 </div>
-                
+
                 <div class="financial-breakdown">
                     <div class="breakdown-header">Cost Breakdown</div>
                     <div class="breakdown-items">
@@ -482,7 +418,7 @@
                             </div>
                             <div class="breakdown-value">32%</div>
                         </div>
-                        
+
                         <div class="breakdown-item">
                             <div class="breakdown-label">Equipment</div>
                             <div class="breakdown-bar">
@@ -490,7 +426,7 @@
                             </div>
                             <div class="breakdown-value">28%</div>
                         </div>
-                        
+
                         <div class="breakdown-item">
                             <div class="breakdown-label">Supplies</div>
                             <div class="breakdown-bar">
@@ -498,7 +434,7 @@
                             </div>
                             <div class="breakdown-value">22%</div>
                         </div>
-                        
+
                         <div class="breakdown-item">
                             <div class="breakdown-label">Utilities</div>
                             <div class="breakdown-bar">
@@ -506,7 +442,7 @@
                             </div>
                             <div class="breakdown-value">10%</div>
                         </div>
-                        
+
                         <div class="breakdown-item">
                             <div class="breakdown-label">Other</div>
                             <div class="breakdown-bar">
@@ -518,7 +454,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="nav-bar">
             <a href="index.html" class="nav-item" title="Farm Dashboard">
                 <i class="fas fa-home"></i>
@@ -536,6 +472,10 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Analytics</span>
             </a>
+            <a href="alerts.html" class="nav-item" title="Alert Command Center">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
+            </a>
             <a href="settings.html" class="nav-item" title="System Settings">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
@@ -548,7 +488,7 @@
             initializeCharts();
             setupDateRangeListener();
             setupButtonGroups();
-            
+
             // Set the current date in the UI
             document.querySelectorAll('.current-date').forEach(el => {
                 el.textContent = new Date().toLocaleDateString('en-US', { 
@@ -559,11 +499,11 @@
                 });
             });
         });
-        
+
         function setupDateRangeListener() {
             const dateRangeSelect = document.getElementById('dateRange');
             const customDateRange = document.querySelector('.custom-date-range');
-            
+
             if (dateRangeSelect && customDateRange) {
                 dateRangeSelect.addEventListener('change', function() {
                     if (this.value === 'custom') {
@@ -574,7 +514,7 @@
                 });
             }
         }
-        
+
         function setupButtonGroups() {
             document.querySelectorAll('.btn-group').forEach(group => {
                 const buttons = group.querySelectorAll('.btn');
@@ -584,7 +524,7 @@
                         buttons.forEach(btn => btn.classList.remove('active-btn'));
                         // Add active class to clicked button
                         this.classList.add('active-btn');
-                        
+
                         // Handle any specific logic based on the button clicked
                         if (this.dataset.chart) {
                             updateChartView(this.dataset.chart);
@@ -597,7 +537,7 @@
                 });
             });
         }
-        
+
         function initializeCharts() {
             // Yield Forecast Chart
             const yieldCtx = document.getElementById('yieldChart');
@@ -662,7 +602,7 @@
                     }
                 });
             }
-            
+
             // Crop Performance Chart
             const cropCtx = document.getElementById('cropPerformanceChart');
             if (cropCtx) {
@@ -712,7 +652,7 @@
                     }
                 });
             }
-            
+
             // Environmental Impact Chart
             const envCtx = document.getElementById('environmentChart');
             if (envCtx) {
@@ -756,7 +696,7 @@
                     }
                 });
             }
-            
+
             // Resource Optimization Chart
             const resourceCtx = document.getElementById('resourceChart');
             if (resourceCtx) {
@@ -820,7 +760,7 @@
                     }
                 });
             }
-            
+
             // Seasonal Insights Chart
             const seasonalCtx = document.getElementById('seasonalChart');
             if (seasonalCtx) {
@@ -871,7 +811,7 @@
                     }
                 });
             }
-            
+
             // Financial Chart
             const financialCtx = document.getElementById('financialChart');
             if (financialCtx) {
@@ -943,13 +883,13 @@
                 });
             }
         }
-        
+
         function updateChartView(chartType) {
             console.log(`Updating chart view to: ${chartType}`);
-            
+
             // In a real application, this would update the chart with specific data
             // For this example, we're just logging the action
-            
+
             // You could swap chart data here based on the selected type
             // For example:
             if (chartType === 'area') {
@@ -960,13 +900,13 @@
                 // Default to yield data
             }
         }
-        
+
         function updateCropView(cropType) {
             console.log(`Updating crop view to: ${cropType}`);
-            
+
             // In a real application, this would filter the chart to show only the selected crop
             // For this example, we're just logging the action
-            
+
             // Example implementation could be:
             if (cropType === 'all') {
                 // Show all crops data
@@ -974,13 +914,13 @@
                 // Filter to show only the selected crop type
             }
         }
-        
+
         function updateSeasonView(seasonType) {
             console.log(`Updating seasonal view to: ${seasonType}`);
-            
+
             // In a real application, this would update the seasonal insights chart
             // For this example, we're just logging the action
-            
+
             // Example implementation could be:
             if (seasonType === 'historical') {
                 // Show historical season data
@@ -990,77 +930,77 @@
                 // Show current season data
             }
         }
-        
+
         function showMetricDetail(metric) {
             console.log(`Showing details for: ${metric}`);
-            
+
             // In a real application, this would show a modal with detailed information
             // For this example, we're just logging the action
-            
+
             alert(`Detailed information for ${metric} metric would be shown here.`);
         }
-        
+
         function viewFullReport() {
             console.log("Viewing full performance report");
-            
+
             // In a real application, this would navigate to a detailed report page
             // For this example, we're just logging the action
-            
+
             alert("Full performance report would be displayed here.");
         }
-        
+
         function generateReport(type) {
             console.log(`Generating ${type} report`);
-            
+
             // In a real application, this would generate a downloadable report
             // For this example, we're just logging the action
-            
+
             alert(`${type.charAt(0).toUpperCase() + type.slice(1)} report is being generated. It will be available for download shortly.`);
         }
-        
+
         function optimizeResources() {
             console.log("Optimizing resources");
-            
+
             // In a real application, this would run an optimization algorithm
             // For this example, we're just logging the action
-            
+
             alert("Resource optimization calculation in progress.\n\nThis may take a few moments...");
-            
+
             // Simulate a delay for the calculation
             setTimeout(() => {
                 alert("Resource optimization complete. New recommendations generated.");
             }, 2000);
         }
-        
+
         function exportAnalytics() {
             console.log("Exporting analytics data");
-            
+
             // In a real application, this would export the data
             // For this example, we're just logging the action
-            
+
             const format = prompt("Select export format (CSV, PDF, Excel):", "CSV");
             if (format) {
                 alert(`Analytics data will be exported in ${format} format. Download will begin shortly.`);
             }
         }
-        
+
         function exportFinancialReport() {
             console.log("Exporting financial report");
-            
+
             // In a real application, this would export the financial report
             // For this example, we're just logging the action
-            
+
             alert("Financial report will be exported as PDF. Download will begin shortly.");
         }
-        
+
         function refreshData() {
             console.log("Refreshing analytics data");
-            
+
             // In a real application, this would refresh the data from the server
             // For this example, we're just logging the action
-            
+
             alert("Refreshing data...");
-            
+
             // Simulate a delay for the refresh
             setTimeout(() => {
                 alert("Data refreshed successfully.");
@@ -1069,48 +1009,48 @@
                 // location.reload();
             }, 1500);
         }
-        
+
         function applyFilters() {
             const dateRange = document.getElementById('dateRange').value;
             const cropType = document.getElementById('cropType').value;
             const sensorGroup = document.getElementById('sensorGroup').value;
             const dataResolution = document.getElementById('dataResolution').value;
-            
+
             console.log("Applying filters:", {
                 dateRange, cropType, sensorGroup, dataResolution
             });
-            
+
             if (dateRange === 'custom') {
                 const startDate = document.getElementById('startDate').value;
                 const endDate = document.getElementById('endDate').value;
                 console.log("Custom date range:", startDate, "to", endDate);
             }
-            
+
             // In a real application, this would update all charts and data
             // For this example, we're just logging the action
-            
+
             alert("Filters applied. Data updated.");
         }
-        
+
         function resetFilters() {
             // Reset all filter dropdowns to their default values
             document.getElementById('dateRange').value = '30';
             document.getElementById('cropType').value = 'all';
             document.getElementById('sensorGroup').value = 'all';
             document.getElementById('dataResolution').value = 'day';
-            
+
             // Hide custom date range if it's visible
             document.querySelector('.custom-date-range').style.display = 'none';
-            
+
             console.log("Filters reset to defaults");
-            
+
             // In a real application, this would refresh the data with default filters
             // For this example, we're just logging the action
-            
+
             alert("Filters reset to default values. Data updated.");
         }
     </script>
-    
+
     <style>
         /* Inline styles for analytics page enhancements */
         .filter-group {
@@ -1120,13 +1060,13 @@
             margin-right: 15px;
             min-width: 150px;
         }
-        
+
         .filter-group label {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
         }
-        
+
         .analytics-filter {
             display: flex;
             flex-wrap: wrap;
@@ -1137,13 +1077,13 @@
             border-radius: 8px;
             border: 1px solid rgba(0,0,0,0.05);
         }
-        
+
         .btn-group {
             display: flex;
             gap: 5px;
             flex-wrap: wrap;
         }
-        
+
         .btn-group .btn {
             padding: 6px 10px;
             border-radius: 20px;
@@ -1153,13 +1093,13 @@
             transition: all 0.3s;
             font-weight: 600;
         }
-        
+
         .btn-group .btn.active-btn {
             background: var(--primary-color);
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             transform: translateY(-2px);
         }
-        
+
         .analytics-card {
             background: white;
             border-radius: 12px;
@@ -1172,25 +1112,25 @@
             justify-content: center;
             cursor: pointer;
         }
-        
+
         .analytics-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
-        
+
         .analytics-value {
             font-size: 24px;
             font-weight: 700;
             color: var(--dark-color);
             margin: 10px 0;
         }
-        
+
         .analytics-label {
             font-size: 14px;
             color: var(--text-secondary);
             font-weight: 500;
         }
-        
+
         .trend-indicator {
             display: flex;
             align-items: center;
@@ -1199,15 +1139,15 @@
             font-size: 12px;
             margin-top: 8px;
         }
-        
+
         .trend-up {
             color: var(--success-color);
         }
-        
+
         .trend-down {
             color: var(--danger-color);
         }
-        
+
         .forecast-stats {
             display: flex;
             flex-wrap: wrap;
@@ -1218,7 +1158,7 @@
             padding: 10px;
             border-radius: 8px;
         }
-        
+
         .forecast-stat-item {
             display: flex;
             flex-direction: column;
@@ -1226,26 +1166,26 @@
             padding: 8px;
             min-width: 150px;
         }
-        
+
         .forecast-label {
             font-size: 12px;
             color: var(--text-secondary);
             margin-bottom: 5px;
         }
-        
+
         .forecast-value {
             font-size: 16px;
             font-weight: 700;
             color: var(--dark-color);
         }
-        
+
         .crop-metric-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .crop-metric-card {
             background: white;
             border-radius: 10px;
@@ -1254,36 +1194,36 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .crop-metric-card:hover {
             transform: translateY(-3px);
         }
-        
+
         .crop-metric-title {
             font-weight: 600;
             margin-bottom: 5px;
             color: var(--dark-color);
         }
-        
+
         .crop-metric-value {
             font-size: 24px;
             font-weight: 700;
             color: var(--primary-color);
             margin: 10px 0;
         }
-        
+
         .crop-metric-label {
             font-size: 12px;
             color: var(--text-secondary);
         }
-        
+
         .impact-metrics {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .impact-metric-item {
             display: flex;
             align-items: center;
@@ -1294,11 +1234,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .impact-metric-item:hover {
             transform: translateY(-3px);
         }
-        
+
         .impact-icon {
             font-size: 28px;
             border-radius: 50%;
@@ -1309,36 +1249,36 @@
             justify-content: center;
             background: rgba(0,0,0,0.03);
         }
-        
+
         .impact-details {
             flex: 1;
         }
-        
+
         .impact-title {
             font-weight: 600;
             margin-bottom: 5px;
             color: var(--dark-color);
         }
-        
+
         .impact-value {
             font-size: 20px;
             font-weight: 700;
             color: var(--primary-color);
             margin: 5px 0;
         }
-        
+
         .impact-desc {
             font-size: 12px;
             color: var(--text-secondary);
         }
-        
+
         .resource-recommendations {
             margin-top: 15px;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .resource-recommendation-card {
             background: white;
             border-radius: 10px;
@@ -1346,12 +1286,12 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .resource-recommendation-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
-        
+
         .recommendation-header {
             padding: 12px 15px;
             background: #f5f5f5;
@@ -1361,18 +1301,18 @@
             gap: 10px;
             border-bottom: 1px solid #eee;
         }
-        
+
         .recommendation-body {
             padding: 15px;
         }
-        
+
         .recommendation-metrics {
             display: flex;
             gap: 10px;
             margin: 10px 0;
             flex-wrap: wrap;
         }
-        
+
         .savings-badge, .efficiency-badge, .sustainability-badge {
             padding: 4px 8px;
             border-radius: 4px;
@@ -1380,19 +1320,19 @@
             font-weight: 600;
             color: white;
         }
-        
+
         .savings-badge {
             background: #4caf50;
         }
-        
+
         .efficiency-badge {
             background: #2196f3;
         }
-        
+
         .sustainability-badge {
             background: #9c27b0;
         }
-        
+
         .recommendation-action-btn {
             padding: 6px 12px;
             background: var(--primary-color);
@@ -1404,18 +1344,18 @@
             font-size: 13px;
             transition: background 0.3s;
         }
-        
+
         .recommendation-action-btn:hover {
             background: var(--secondary-color);
         }
-        
+
         .seasonal-highlights {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .highlight-card {
             background: white;
             border-radius: 10px;
@@ -1426,11 +1366,11 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .highlight-card:hover {
             transform: translateY(-3px);
         }
-        
+
         .highlight-icon {
             width: 50px;
             height: 50px;
@@ -1442,29 +1382,29 @@
             font-size: 20px;
             color: var(--primary-color);
         }
-        
+
         .highlight-content {
             flex: 1;
         }
-        
+
         .highlight-title {
             font-weight: 600;
             margin-bottom: 5px;
             color: var(--dark-color);
         }
-        
+
         .highlight-text {
             font-size: 13px;
             color: var(--text-secondary);
         }
-        
+
         .financial-summary {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 15px;
         }
-        
+
         .financial-metric {
             background: white;
             border-radius: 10px;
@@ -1473,69 +1413,69 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .financial-metric:hover {
             transform: translateY(-3px);
         }
-        
+
         .financial-value {
             font-size: 24px;
             font-weight: 700;
             color: var(--dark-color);
             margin-bottom: 5px;
         }
-        
+
         .financial-label {
             font-size: 14px;
             color: var(--text-secondary);
             margin-bottom: 5px;
         }
-        
+
         .financial-change {
             font-size: 13px;
             font-weight: 600;
         }
-        
+
         .financial-change.positive {
             color: var(--success-color);
         }
-        
+
         .financial-change.negative {
             color: var(--danger-color);
         }
-        
+
         .financial-breakdown {
             margin-top: 15px;
             background: rgba(0,0,0,0.02);
             padding: 15px;
             border-radius: 10px;
         }
-        
+
         .breakdown-header {
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--dark-color);
         }
-        
+
         .breakdown-items {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         .breakdown-item {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .breakdown-label {
             width: 100px;
             font-size: 14px;
             font-weight: 500;
         }
-        
+
         .breakdown-bar {
             flex: 1;
             height: 12px;
@@ -1543,34 +1483,34 @@
             border-radius: 6px;
             overflow: hidden;
         }
-        
+
         .breakdown-fill {
             height: 100%;
             border-radius: 6px;
         }
-        
+
         .breakdown-value {
             width: 50px;
             font-size: 14px;
             font-weight: 600;
             text-align: right;
         }
-        
+
         @media (max-width: 768px) {
             .filter-group {
                 min-width: 120px;
             }
-            
+
             .analytics-card {
                 padding: 10px;
             }
-            
+
             .financial-summary, 
             .crop-metric-grid, 
             .seasonal-highlights {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
-            
+
             .impact-metrics {
                 grid-template-columns: 1fr;
             }
