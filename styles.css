@@ -67,6 +67,51 @@ body {
     .section-title {
         font-size: 18px;
     }
+
+    /* Enhance grid and card responsiveness for smaller devices */
+    @media (max-width: 767px) {
+        .sensor-card, .analytics-card, .settings-item, .weather-card, .notification-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 13px;
+        }
+    
+        .section-header, .header {
+            padding: 10px;
+            font-size: 14px;
+        }
+    
+        .section-title, .header-title {
+            font-size: 15px;
+        }
+    
+        .chart-container {
+            height: auto;
+            padding: 10px;
+            margin: 10px auto;
+        }
+    
+        /* Specific enhancements for different sections */
+        .forecast-grid, .quick-stats, .notification-list, .settings-section {
+            display: block;
+            gap: 10px;
+        }
+    
+        .forecast-card, .data-card, .stat-card, .settings-item {
+            min-width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+    
+        .action-buttons .btn {
+            font-size: 12px;
+            padding: 4px 6px;
+        }
+    
+        .quick-stats .stat-value, .analytics-value, .sensor-title {
+            font-size: 14px;
+        }
+    }
     .sensor-title {
         font-size: 17px;
     }
@@ -76,16 +121,28 @@ body {
 }
 
 @media (max-width: 767px) {
-    body {
-        font-size: 14px;
+    .section, .content, .chart-container, .notification-list, .weather-stat-grid, .forecast-grid, .sensor-grid-modern, .action-buttons {
+        padding: 10px;
+        margin: 0;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
-    .section-title {
+
+    .stat-card, .sensor-card, .forecast-card, .notification-item, .data-card {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .section-header .section-title, .settings-title {
         font-size: 16px;
     }
-    .sensor-title {
-        font-size: 15px;
+
+    .btn, .chart-container, .forecast-icon, .notification-icon, .sensor-icon {
+        font-size: 12px;
     }
-    .stat-value {
+
+    .notification-text, .data-value, .analytics-value {
         font-size: 14px;
     }
 }
@@ -506,15 +563,29 @@ body {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
     .nav-bar {
         padding: 8px 5px;
         bottom: 10px !important;
+        width: 95% !important;
+        max-width: 100% !important;
+        border-radius: 10px;
     }
 
     .nav-item {
-        margin: 0 2px;
-        padding: 5px 2px;
+        margin: 0 1px;
+        min-width: 45px;
+        padding: 4px 0;
+        flex: 1;
+    }
+
+    .nav-item i {
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+
+    .nav-item span {
+        font-size: 8px;
     }
 }
 
@@ -961,8 +1032,7 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
-}
+    flex-wrap: wrap;}
 
 .analytics-filter select {
     padding: 8px 12px;
@@ -1191,7 +1261,7 @@ body {
         min-width: 100px;
         margin: 0 8px;
     }
-    
+
     .nav-bar {
         padding: 14px 25px;
     }
@@ -1199,23 +1269,25 @@ body {
 
 @media (max-width: 768px) {
     .nav-bar {
-        padding: 10px;
-        bottom: 15px !important;
-        max-width: 90%;
+        padding: 8px 10px;
+        bottom: 20px !important;
+        width: 90% !important;
+        border-radius: 12px;
     }
-    
+
     .nav-item {
-        margin: 0 3px;
-        min-width: 55px;
-        padding: 8px 5px;
+        margin: 0 2px;
+        min-width: 50px;
+        padding: 5px 4px;
     }
-    
+
     .nav-item i {
-        font-size: 20px !important;
+        font-size: 18px !important;
+        margin-bottom: 4px;
     }
-    
+
     .nav-item span {
-        font-size: 10px !important;
+        font-size: 9px !important;
     }
 }
 
@@ -1224,9 +1296,9 @@ body {
         padding: 8px 5px;
         bottom: 10px !important;
     }
-    
+
     .nav-item {
-        margin: 0 1px;
+        margin: 0 2px;
         padding: 5px 2px;
     }
 }
