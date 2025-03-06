@@ -75,39 +75,39 @@ body {
             padding: 8px;
             font-size: 13px;
         }
-    
+
         .section-header, .header {
             padding: 10px;
             font-size: 14px;
         }
-    
+
         .section-title, .header-title {
             font-size: 15px;
         }
-    
+
         .chart-container {
             height: auto;
             padding: 10px;
             margin: 10px auto;
         }
-    
+
         /* Specific enhancements for different sections */
         .forecast-grid, .quick-stats, .notification-list, .settings-section {
             display: block;
             gap: 10px;
         }
-    
+
         .forecast-card, .data-card, .stat-card, .settings-item {
             min-width: 100%;
             margin-bottom: 10px;
             padding: 8px;
         }
-    
+
         .action-buttons .btn {
             font-size: 12px;
             padding: 4px 6px;
         }
-    
+
         .quick-stats .stat-value, .analytics-value, .sensor-title {
             font-size: 14px;
         }
@@ -167,6 +167,7 @@ body {
 
 .header-title {
     display: flex;
+    flex-direction: column; /* Ensure icons appear below the text */
     align-items: center;
     gap: 6px;
     font-size: 16px;
@@ -376,12 +377,11 @@ body {
 .section-header .action-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
-    justify-content: flex-end;
+    justify-content: center; /* Center buttons under titles on mobile */
 }
 
 .section-title {
-    font-size: 16px;
+    font-size: 18px; /* Larger title on mobile */
     font-weight: 700;
     color: var(--dark-color);
     display: flex;
@@ -2192,4 +2192,9 @@ body {
     color: white;
     border: none;
     cursor: pointer;
+}
+@media (max-width: 767px) {
+    .section-header {
+        flex-direction: column; /* Ensure icons appear below the text */
+    }
 }
