@@ -6,7 +6,8 @@
     <title>AgriSense Pro - Precision Farming Revolution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="chart.js" defer></script>
+    <script src="js/main.js" defer></script>
+
 
     <style>
         /* Comprehensive CSS with Professional Design and Extensive Features */
@@ -416,134 +417,230 @@
         }
 
         .nav-bar {
-            position: fixed !important;
-            bottom: 20px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            background: linear-gradient(135deg, #4caf50, #81c784); /* Green gradient */
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            z-index: 9999 !important;
-            transition: none !important;
-            width: auto;
-            box-sizing: border-box;
-            max-width: 1400px;
-            min-width: 320px;
-            margin: 0 auto;
-            backdrop-filter: blur(5px);
-            pointer-events: auto;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: linear-gradient(135deg, #43a047, #66bb6a, #2e7d32); /* Enhanced green gradient */
+    padding: 14px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3), 0 0 15px rgba(76, 175, 80, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    z-index: 9999 !important;
+    transition: none !important;
+    width: 95% !important;
+    max-width: 750px !important;
+    min-width: 320px !important;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    pointer-events: auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
 
-        .nav-item {
-            flex: 1;
-            color: rgba(255, 255, 255, 0.9);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 10px 8px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            min-width: 60px;
-            overflow: visible;
-            margin: 0 8px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        
-        /* Responsive navigation */
-        @media (min-width: 992px) {
-            .nav-item {
-                min-width: 100px;
-                margin: 0 12px;
-            }
-            
-            .nav-bar {
-                padding: 12px 20px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-bar {
-                padding: 10px;
-                bottom: 15px !important;
-                max-width: 90%;
-            }
-            
-            .nav-item {
-                margin: 0 5px;
-                min-width: 50px;
-                padding: 8px 5px;
-            }
-            
-            .nav-item i {
-                font-size: 20px !important;
-            }
-            
-            .nav-item span {
-                font-size: 10px !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .nav-bar {
-                padding: 8px 5px;
-                bottom: 10px !important;
-            }
-            
-            .nav-item {
-                margin: 0 2px;
-                padding: 5px 2px;
-            }
-        }
+.nav-item {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px 8px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    min-width: 60px;
+    overflow: visible;
+    margin: 0 2px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
 
-        .nav-item.active {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.35), 0 3px 10px rgba(0,0,0,0.15);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
+/* Responsive navigation */
+@media (min-width: 992px) {
+    .nav-item {
+        min-width: 100px;
+        margin: 0 12px;
+    }
 
-        .nav-item:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-        }
+    .nav-bar {
+        padding: 12px 20px;
+    }
+}
 
-        .nav-item i {
-            font-size: 24px;
-            margin-bottom: 6px;
-            transition: transform 0.3s ease;
-        }
-        
-        .nav-item:hover i {
-            transform: scale(1.2);
-        }
+@media (max-width: 768px) {
+    .nav-bar {
+        padding: 10px;
+        bottom: 15px !important;
+        max-width: 90%;
+    }
 
-        .nav-item span {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: visible;
-            opacity: 1;
-            display: block;
-            width: 100%;
-            text-align: center;
-            line-height: 1.3;
-        }
+    .nav-item {
+        margin: 0 5px;
+        min-width: 50px;
+        padding: 8px 5px;
+    }
+
+    .nav-item i {
+        font-size: 20px !important;
+    }
+
+    .nav-item span {
+        font-size: 10px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-bar {
+        padding: 8px 5px;
+        bottom: 10px !important;
+    }
+
+    .nav-item {
+        margin: 0 2px;
+        padding: 5px 2px;
+    }
+}
+
+.nav-item.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.35), 0 3px 10px rgba(0,0,0,0.15);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+.nav-item i {
+    font-size: 24px;
+    margin-bottom: 6px;
+    transition: transform 0.3s ease;
+}
+
+.nav-item:hover i {
+    transform: scale(1.2);
+}
+
+.nav-item span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: visible;
+    opacity: 1;
+    display: block;
+    width: 100%;
+    text-align: center;
+    line-height: 1.3;
+}
+
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #e8ecef;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e8ecef;
+    padding-bottom: 8px;
+    width: 100%;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2e7d32;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+    width: 100%;
+}
+
+.btn {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    background: #4caf50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    margin: 2px;
+}
+
+.btn:hover {
+    background: #388e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.chart-container {
+    position: relative;
+    height: 320px;
+    margin: 15px auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
 
         .sensor-grid {
             display: grid;
@@ -2528,40 +2625,99 @@
                 </div>
 
                 <div class="nav-bar">
-                    <div class="nav-item active" onclick="switchView('home')" title="Farm Dashboard">
+                    <a href="index.html" class="nav-item" title="Farm Dashboard">
                         <i class="fas fa-home"></i>
                         <span>Home</span>
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='sensors.html'" title="Sensor Management">
+                    </a>
+                    <a href="sensors.html" class="nav-item" title="Sensor Management">
                         <i class="fas fa-microchip"></i>
                         <span>Sensors</span>
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='weather.html'" title="Weather Command Station">
+                    </a>
+                    <a href="weather.html" class="nav-item" title="Weather Command Station">
                         <i class="fas fa-cloud-sun"></i>
                         <span>Weather</span>
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='analytics.html'" title="Data Analytics">
+                    </a>
+                    <a href="analytics.html" class="nav-item" title="Data Analytics">
                         <i class="fas fa-chart-line"></i>
                         <span>Analytics</span>
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='alerts.html'" title="Alert Command Center">
+                    </a>
+                    <a href="alerts.html" class="nav-item" title="Alert Command Center">
                         <i class="fas fa-bell"></i>
                         <span>Alerts</span>
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='settings.html'" title="System Settings">
+                    </a>
+                    <a href="settings.html" class="nav-item" title="System Settings">
                         <i class="fas fa-cog"></i>
                         <span>Settings</span>
-                    </div>
+                    </a>
                 </div>
             </div>
 
             <script>
-            // Global variable to track expanded items
-            let expandedSensor = null;
-            let expandedCrop = null;
+            // Initialize navigation when the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log("Initializing AgriSense Pro 3 dashboard...");
+                
+                // Highlight the active page in the navigation bar
+                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+                const navItems = document.querySelectorAll('.nav-bar .nav-item');
+                
+                navItems.forEach(item => {
+                    const href = item.getAttribute('href');
+                    if (href === currentPage) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Fix navigation bar styling
+                const navBar = document.querySelector('.nav-bar');
+                if (navBar) {
+                    navBar.style.position = 'fixed';
+                    navBar.style.bottom = '20px';
+                    navBar.style.left = '50%';
+                    navBar.style.transform = 'translateX(-50%)';
+                    navBar.style.zIndex = '9999';
+                    navBar.style.width = '90%';
+                    navBar.style.maxWidth = '600px';
+                }
+                
+                console.log("Initialization complete");
+            });
+            
+            // Fix navigation click handling
+            function fixNavigation() {
+                const navItems = document.querySelectorAll('.nav-bar .nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Get the href attribute to determine which page to go to
+                        const href = this.getAttribute('href');
+                        if (href) {
+                            // For SPA navigation within this page
+                            if (href.includes('.html')) {
+                                // Remove 'active' class from all nav items
+                                navItems.forEach(navItem => navItem.classList.remove('active'));
+                                // Add 'active' class to the clicked nav item
+                                this.classList.add('active');
+                                
+                                // Navigate to the page
+                                window.location.href = href;
+                            }
+                        }
+                        
+                        return false;
+                    });
+                });
+                
+                console.log("Navigation links fixed and ready");
+            }
             
             // Initialize views and navigation when the page loads
             document.addEventListener('DOMContentLoaded', function() {
+                // Fix navigation
+                fixNavigation();
                 console.log("Initializing AgriSense Pro 3 dashboard...");
                 
                 // Set up initial views - hide all except home
@@ -5071,8 +5227,8 @@
                                                 if (sensor.stage) updateElement(`stage${index + 1}`, sensor.stage);
                                                 if (sensor.planting) updateElement(`planting${index + 1}`, sensor.planting);
                                                 if (sensor.harvest) updateElement(`harvest${index + 1}`, sensor.harvest);
-                                                if (sensor.yield) updateElement(`yield${index + 1}`, `${sensor.yield}%`);nsor.light} Dli`);
-                                                updateElement(`ph${index + 1}`, sensor.ph);
+                                                if (sensor.yield) updateElement(`yield${index + 1}`, `${sensor.yield}%`);
+                                                updateElement(`light${index + 1}`, `${sensor.light} Dli`);                                                updateElement(`ph${index + 1}`, sensor.ph);
                                                 updateElement(`battery${index + 1}`, `${sensor.battery}%`);
                                                 
                                                 // Update sensor full data
