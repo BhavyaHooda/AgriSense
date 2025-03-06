@@ -1,124 +1,146 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
+// Define global variables
+let sensorData = {
+    sensors: [],
+    weather: { temp: 72, humid: 65, wind: 8, precip: 10 },
+    crops: {
+        'Corn': { health: 'Good', water: 'Moderate', yield: 85 },
+        'Wheat': { health: 'Excellent', water: 'Low', yield: 90 },
+        'Soybeans': { health: 'Good', water: 'Moderate', yield: 82 }
+    },
+    tasks: [],
+    logs: []
+};
+let liveUpdate = false;
+let updateInterval = null;
+let notifications = [];
+let unitSystem = 'imperial';
+let language = 'en';
 
-// Enable JSON parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Serve static files with cache control
-app.use(express.static(__dirname, {
-  maxAge: '1h',
-  setHeaders: (res, path) => {
-    if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (path.endsWith('.html')) {
-      res.setHeader('Content-Type', 'text/html');
+// Core functions
+function switchView(view) {
+    const views = document.querySelectorAll('.view');
+    views.forEach(v => {
+        v.classList.remove('active');
+        v.style.display = 'none';
+    });
+    
+    const selectedView = document.querySelector(`.${view}-view`);
+    if (selectedView) {
+        selectedView.classList.add('active');
+        selectedView.style.display = 'block';
+        updateNavHighlight(view);
     }
-  }
-}));
+}
 
-// Serve the main HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+function updateNavHighlight(view) {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.onclick.toString().includes(view)) {
+            item.classList.add('active');
+        }
+    });
+}
+
+function toggleSensor(element, sensorId) {
+    element.classList.toggle('expanded');
+}
+
+function toggleCrop(element, cropName) {
+    element.classList.toggle('expanded');
+}
+
+function performSearch() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const sensors = document.querySelectorAll('.sensor-card');
+    sensors.forEach(sensor => {
+        const title = sensor.querySelector('.sensor-title').textContent.toLowerCase();
+        sensor.style.display = title.includes(searchTerm) ? 'block' : 'none';
+    });
+}
+
+function toggleLiveUpdate() {
+    liveUpdate = !liveUpdate;
+    document.getElementById('liveStatus').textContent = liveUpdate ? 'On' : 'Off';
+    if (liveUpdate && !updateInterval) {
+        updateInterval = setInterval(updateSensorData, 5000);
+    } else if (!liveUpdate && updateInterval) {
+        clearInterval(updateInterval);
+        updateInterval = null;
+    }
+}
+
+function updateSensorData() {
+    sensorData.sensors.forEach((sensor, index) => {
+        const temp = document.getElementById(`temp${index + 1}`);
+        if (temp) temp.textContent = `${(sensor.temp + (Math.random() - 0.5) * 2).toFixed(1)}°F`;
+    });
+}
+
+// Initialize charts
+function initCharts() {
+    const chartElements = document.querySelectorAll('canvas');
+    chartElements.forEach(canvas => {
+        if (!canvas.chart) {
+            new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: ['1', '2', '3', '4', '5'],
+                    datasets: [{
+                        label: canvas.id.includes('sensor') ? 'Temperature' : 'Value',
+                        data: [65, 70, 72, 71, 73],
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+    });
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+    
+    const addSensorForm = document.getElementById('addSensorForm');
+    if (addSensorForm) {
+        addSensorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newSensor = {
+                id: document.getElementById('sensorId').value,
+                temp: 72,
+                humid: 65,
+                light: 14,
+                ph: 7.5,
+                battery: 100
+            };
+            sensorData.sensors.push(newSensor);
+            switchView('sensors');
+        });
+    }
 });
 
-// API endpoint for checking server status
-app.get('/api/status', (req, res) => {
-  res.json({ status: 'online', message: 'AgriSense Pro server is running properly' });
-});
-
-// API endpoint for simulated sensor data
-app.get('/api/sensors', (req, res) => {
-  // Sample data that could be replaced with real sensor readings
-  const sensorData = {
-    sensors: [
-      { id: 'Sensor 1', temp: 72, humid: 65, light: 14, ph: 7.5, battery: 95, status: 'Active' },
-      { id: 'Sensor 2', temp: 71, humid: 64, light: 13.8, ph: 7.4, battery: 88, status: 'Active' },
-      { id: 'Sensor 3', temp: 73, humid: 66, light: 14.2, ph: 7.6, battery: 92, status: 'Active' },
-      { id: 'Sensor 4', temp: 70, humid: 63, light: 13.5, ph: 7.3, battery: 90, status: 'Active' }
-    ],
-    timestamp: new Date().toISOString()
-  };
-  res.json(sensorData);
-});
-
-// Handle 404 errors
-app.use((req, res) => {
-  res.status(404).send(`
-    <html>
-      <head>
-        <title>Page Not Found</title>
-        <style>
-          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-          h1 { color: #4caf50; }
-          a { color: #4caf50; text-decoration: none; }
-          a:hover { text-decoration: underline; }
-        </style>
-      </head>
-      <body>
-        <h1>404 - Page Not Found</h1>
-        <p>The page you are looking for does not exist.</p>
-        <a href="/">Return to AgriSense Pro Dashboard</a>
-      </body>
-    </html>
-  `);
-});
-
-// Error handler middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send(`
-    <html>
-      <head>
-        <title>Server Error</title>
-        <style>
-          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-          h1 { color: #c62828; }
-          a { color: #4caf50; text-decoration: none; }
-          a:hover { text-decoration: underline; }
-        </style>
-      </head>
-      <body>
-        <h1>500 - Server Error</h1>
-        <p>Something went wrong. Please try again later.</p>
-        <a href="/">Return to AgriSense Pro Dashboard</a>
-      </body>
-    </html>
-  `);
-});
-
-// Start the server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`=== AgriSense Pro Server ===`);
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`✅ Access your app at: https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`);
-  console.log(`✅ Farm monitoring interface initialized successfully`);
-  console.log(`=== Ready for connections ===`);
-
-  // Log system information
-  console.log(`Memory usage: ${Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100} MB`);
-  console.log(`Node.js version: ${process.version}`);
-  console.log(`Platform: ${process.platform}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`⚠️ Port ${PORT} is already in use. The application might already be running.`);
-    console.log(`ℹ️ Try stopping any running instances first or use a different port.`);
-  } else {
-    console.error('Failed to start server:', err);
-  }
-});
-
-// Enable proper error handling
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-// Server-side code only
+// Stub functions for remaining functionality
+function exportData() { console.log('Exporting data...'); }
+function generateReport() { console.log('Generating report...'); }
+function runDiagnostics() { console.log('Running diagnostics...'); }
+function syncAll() { console.log('Syncing all systems...'); }
+function scheduleIrrigation() { console.log('Scheduling irrigation...'); }
+function applyFertilizer() { console.log('Applying fertilizer...'); }
+function monitorPests() { console.log('Monitoring pests...'); }
+function addCrop() { console.log('Adding crop...'); }
+function calibrateSensors() { console.log('Calibrating sensors...'); }
+function syncSensors() { console.log('Syncing sensors...'); }
+function resetSensors() { console.log('Resetting sensors...'); }
+function updateWeatherAlerts() { console.log('Updating weather alerts...'); }
+function adjustIrrigation() { console.log('Adjusting irrigation...'); }
+function downloadWeatherData() { console.log('Downloading weather data...'); }
+function setWeatherThresholds() { console.log('Setting weather thresholds...'); }
+function viewHourlyForecast() { console.log('Viewing hourly forecast...'); }
+function viewWeeklyForecast() { console.log('Viewing weekly forecast...'); }
+function scheduleTask() { console.log('Scheduling task...'); }
+function viewTaskHistory() { console.log('Viewing task history...'); }
