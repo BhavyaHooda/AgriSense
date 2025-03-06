@@ -299,44 +299,6 @@
                     <button class="settings-button" style="background: #4caf50; min-width: 200px; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">Open Interactive Map</button>
                 </div>
                 
-                <div style="background: #fff; border-radius: 8px; padding: 15px; margin: 15px 0; border: 1px dashed rgba(76, 175, 80, 0.5);">
-                    <div style="position: relative; height: 250px; background: url('https://i.imgur.com/JyCLYmJ.png') center/cover no-repeat; border-radius: 8px; overflow: hidden;">
-                        <!-- Map visualization elements -->
-                        <div style="position: absolute; top: 65px; left: 120px; width: 20px; height: 20px; background-color: #4caf50; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3); cursor: pointer;" title="Sensor 1 - Online"></div>
-                        <div style="position: absolute; top: 110px; left: 180px; width: 20px; height: 20px; background-color: #4caf50; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3); cursor: pointer;" title="Sensor 2 - Online"></div>
-                        <div style="position: absolute; top: 150px; left: 80px; width: 20px; height: 20px; background-color: #4caf50; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3); cursor: pointer;" title="Sensor 3 - Online"></div>
-                        <div style="position: absolute; top: 100px; left: 300px; width: 20px; height: 20px; background-color: #ff9800; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3); cursor: pointer;" title="Sensor 4 - Warning"></div>
-                        
-                        <!-- Map controls overlay -->
-                        <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); border-radius: 4px; padding: 5px; display: flex; flex-direction: column; gap: 5px;">
-                            <div style="width: 30px; height: 30px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" title="Zoom In">
-                                <i class="fas fa-plus" style="color: #4caf50;"></i>
-                            </div>
-                            <div style="width: 30px; height: 30px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" title="Zoom Out">
-                                <i class="fas fa-minus" style="color: #4caf50;"></i>
-                            </div>
-                            <div style="width: 30px; height: 30px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" title="Layer Options">
-                                <i class="fas fa-layer-group" style="color: #4caf50;"></i>
-                            </div>
-                        </div>
-                        
-                        <!-- Map legend -->
-                        <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(255,255,255,0.8); border-radius: 4px; padding: 8px; font-size: 12px;">
-                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                <div style="width: 12px; height: 12px; background-color: #4caf50; border-radius: 50%; margin-right: 5px;"></div>
-                                <span>Online</span>
-                            </div>
-                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                <div style="width: 12px; height: 12px; background-color: #ff9800; border-radius: 50%; margin-right: 5px;"></div>
-                                <span>Warning</span>
-                            </div>
-                            <div style="display: flex; align-items: center;">
-                                <div style="width: 12px; height: 12px; background-color: #f44336; border-radius: 50%; margin-right: 5px;"></div>
-                                <span>Offline</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; justify-content: space-between;">
                     <div class="data-card">
@@ -434,6 +396,10 @@
             <a href="analytics.html" class="nav-item" title="Data Analytics">
                 <i class="fas fa-chart-line"></i>
                 <span>Analytics</span>
+            </a>
+            <a href="alerts.html" class="nav-item" title="Alert Command Center">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
             </a>
             <a href="settings.html" class="nav-item" title="System Settings">
                 <i class="fas fa-cog"></i>
