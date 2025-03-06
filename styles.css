@@ -549,17 +549,17 @@ body {
     }
 
     .nav-item {
-        margin: 0 5px;
-        min-width: 50px;
+        margin: 0 5px; /* Increase spacing between nav items */
+        min-width: 45px;
         padding: 8px 5px;
     }
 
     .nav-item i {
-        font-size: 20px !important;
+        font-size: 18px !important; /* Ensure icons are consistently sized */
     }
 
     .nav-item span {
-        font-size: 10px !important;
+        font-size: 9px !important;
     }
 }
 
@@ -603,8 +603,8 @@ body {
 }
 
 .nav-item i {
-    font-size: 24px;
-    margin-bottom: 6px;
+    font-size: 18px; /* Reduce icon font size */
+    margin-bottom: 4px;
     transition: transform 0.3s ease;
 }
 
@@ -963,7 +963,7 @@ body {
 
 .forecast-grid {
     display: flex; /* Changed to flex for horizontal layout */
-    flex-wrap: wrap;
+    flexwrap: wrap;
     gap: 15px;
     margin-bottom: 20px;
     justify-content: space-between; /* Distribute items evenly */
@@ -1276,14 +1276,13 @@ body {
     }
 
     .nav-item {
-        margin: 0 2px;
-        min-width: 50px;
-        padding: 5px 4px;
+        margin: 0 5px; /* Increase spacing between nav items */
+        min-width: 45px;
+        padding: 8px 5px;
     }
 
     .nav-item i {
-        font-size: 18px !important;
-        margin-bottom: 4px;
+        font-size: 18px !important; /* Ensure icons are consistently sized */
     }
 
     .nav-item span {
